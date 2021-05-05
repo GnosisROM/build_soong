@@ -87,9 +87,12 @@ var (
 		"-Wl,--warn-shared-textrel",
 		"-Wl,--fatal-warnings",
 		"-Wl,--no-undefined-version",
+		// TODO: Eventually we should link against a libunwind.a with hidden symbols, and then these
+		// --exclude-libs arguments can be removed.
 		"-Wl,--exclude-libs,libgcc.a",
 		"-Wl,--exclude-libs,libgcc_stripped.a",
 		"-Wl,--exclude-libs,libunwind_llvm.a",
+		"-Wl,--exclude-libs,libunwind.a",
 	}
 
 	deviceGlobalLldflags = append(ClangFilterUnknownLldflags(deviceGlobalLdflags),
@@ -112,6 +115,12 @@ var (
 	noOverrideGlobalCflags = []string{
 		"-Werror=int-to-pointer-cast",
 		"-Werror=pointer-to-int-cast",
+		// http://b/161386391 for -Wno-void-pointer-to-enum-cast
+		"-Wno-void-pointer-to-enum-cast",
+		// http://b/161386391 for -Wno-void-pointer-to-int-cast
+		"-Wno-void-pointer-to-int-cast",
+		// http://b/161386391 for -Wno-pointer-to-int-cast
+		"-Wno-pointer-to-int-cast",
 		"-Werror=fortify-source",
 	}
 
@@ -128,8 +137,8 @@ var (
 
 	// prebuilts/clang default settings.
 	ClangDefaultBase         = "prebuilts/clang/host"
-	ClangDefaultVersion      = "clang-r383902b1"
-	ClangDefaultShortVersion = "11.0.2"
+	ClangDefaultVersion      = "clang-r416183"
+	ClangDefaultShortVersion = "12.0.4"
 
 	// Directories with warnings from Android.bp files.
 	WarningAllowedProjects = []string{
